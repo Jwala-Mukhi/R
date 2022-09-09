@@ -1,0 +1,125 @@
+---
+title: "Assignment 6 : WHO Life Expectancy"
+author: "Jwala Mukhi Suresh"
+output: html_document
+date: '2022-08-07'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(kableExtra)
+source("analysis.R")
+```
+
+## **INTRODUCTION**
+
+The *World Health Organization's Global Health Observatory* data repository monitors each nation's health status as well as a number of other relevant variables. The data set consist of life expectancy and the related health, economic and social factors for **193** countries. 
+The data set is from *Kaggle*. 
+
+For making the analysis simple, data for only **2013** has been considered. Only the most representative critical factors from each category has been selected to perform the analysis. There were many null and inaccurate values. So factors with the most null values were discarded. Also before ignoring these factors their correlation with life expectancy was evaluated to ensure that the critical factors aren't ignored. 
+
+**Source: https://www.kaggle.com/datasets/kumarajarshi/life-expectancy-who **
+
+**About the factors**
+
+**Life_Expectancy**:     Life expectancy in age
+
+**Adult_Mortality**:     Adult Mortality Rates of both sexes (probability of dying between 15 and 60 years per 1000 population)
+
+**Infant_Deaths**:       Number of Infant Deaths per 1000 population
+
+**Alcohol**:             Alcohol, recorded per capita (15+) consumption (in litres of pure alcohol)
+
+**BMI**:                 Average Body Mass Index of entire population
+
+**HIV_AIDS**:            Deaths per 1 000 live births HIV/AIDS (0-4 years)
+
+**Income_Composition**:  Human Development Index in terms of income composition of resources (index ranging from 0 to 1)
+
+**Schooling**:           Number of years of schooling. Other factors are self explanatory.
+
+The table below shows a sample of the final selected data set.
+
+```{r echo = FALSE}
+table <- knitr::kable(head(life_expectancy, 5), format = "html")
+kable_styling(table)
+```
+
+## **DATA ANALYSIS**
+
+### 1. How many developing & developed countries are present in the dataset?
+
+```{r fig.align = 'center', echo = FALSE}
+countries_total <- knitr::kable(total_countries, format = "html")
+kable_styling(countries_total, full_width = FALSE)
+show(total_countries_plot)
+```
+
+The data set consists of 
+**`r developed`** Developed Countries & 
+**`r developing`** Developing Countries.
+
+### 2. What is the average life expectancy in developed vs developing countries?
+
+```{r fig.align = 'center', echo = FALSE}
+avg <- knitr::kable(average_life_expectancy, format = "html")
+kable_styling(avg, full_width = FALSE)
+show(average_life_expectancy_plot)
+```
+
+The average life expectancy in Developed Countries is 
+**`r developed_avg`**
+and Developing Countries is 
+**`r developing_avg`**
+
+### 3. Which are the 5 countries with the highest life expectancy?
+
+```{r fig.align = 'center', echo = FALSE}
+high_le <- knitr::kable(highest_life_expectancy, format = "html")
+kable_styling(high_le, full_width = FALSE)
+```
+
+The table shows the 5 countries having the highest life expectancy as per the 2013 statistics. It is surprising that out of the 5 countries with highest life expectancy, two countries are **Developing**. This points to the fact that even with a lower economic status with proper health and social factors it is possible to improve the life expectancy. 
+
+
+### 4. How is life expectancy correlated to the different factors?
+
+```{r fig.align = 'center', echo = FALSE}
+fact <- knitr::kable(factor_correlation, format = "html")
+kable_styling(fact, full_width = FALSE)
+```
+The table shows how the different factors are correlated to life expectancy. A positive correlation means that when the factor increase life expectancy also increases and a negative correlation means that when the factor increase life expectancy decreases. This helps to identify what factors are critical to improve the life expectancy.
+
+### 5. Which two factors have the highest positive correlation to life expectancy?
+
+```{r fig.align = 'center', message = FALSE, echo = FALSE}
+high <- knitr::kable(highest_correlation, format = "html")
+kable_styling(high, full_width = FALSE)
+show(income_plot)
+show(schooling_plot)
+```
+
+**`r row.names(highest_correlation)`** with a correlation of **`r income`, `r school`** respectively are the two factors that have the highest positive correlation to life expectancy. This can be seen both from the table and the graph. The two graphs show that how life expectancy increases with an increase in income composition or schooling. Also, based on the color it is clear that developed countries that are having higher income composition and schooling are having the highest life expectancy compared to that of developing countries. A few developing countries that are having the high income composition and schooling are also having higher life expectancy.
+
+# 6. How does Infant and Adult mortality rates affect life expectancy?
+
+```{r fig.align = 'center', message = FALSE, echo = FALSE}
+ia <- knitr::kable(infant_adult, format = "html")
+kable_styling(ia, full_width = FALSE)
+show(infant_plot)
+show(adult_plot)
+```
+
+From the first plot it can be seen that **Infant Deaths** doesn't have much correlation (**`r infant`**) to life expectancy which is surprising. 
+But from the second plot it is clear that **Adult Mortality** rate is negatively correlated (**`r adult`**) to life expectancy. The values in the table supports this fact. Also, based on the color it is clear that developed countries that are having lower adult mortality rates are having the highest life expectancy compared to that of developing countries. A few developing countries that are having the least adult mortality rate are also having higher life expectancy.
+
+## **CONCLUSION**
+
+From the analysis it can be seen that Life expectancy is highly dependent on factors like **Income composition** and **Schooling**. This may be because with higher income composition people might be able to afford better healthcare facilities and this increases life expectancy. With better schooling people are more educated and may be more likely to follow regulations and take better care of themselves. 
+
+Another important factor affecting life expectancy is **Adult Mortality** rate and the graph shows that both are negatively correlated. Countries with a lower adult mortality rate have a higher life expectancy.
+
+Even though the average life expectancy is lower for developing countries, it is surprising that some countries with better income composition, schooling and lower adult mortality rates are able to offer higher life expectancy (even more than what some developed countries have).
